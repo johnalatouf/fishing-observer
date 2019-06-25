@@ -1,0 +1,443 @@
+html,
+body {
+    height: 100%;
+    
+}
+
+.wrap {
+    min-height: 100%;
+    height: auto;
+    margin: 0 auto -60px;
+    padding: 0 0 60px;
+}
+
+.wrap > .container {
+    padding: 70px 15px 20px;
+}
+
+@media (min-width: 992px)
+grid.less:22
+.container {
+    width: 988px;
+}
+
+@media (min-width: 768px)
+grid.less:19
+.container {
+    width: 754px;
+}
+
+.footer {
+    height: 60px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+
+.jumbotron {
+    text-align: center;
+    background-color: transparent;
+}
+
+.jumbotron .btn {
+    font-size: 21px;
+    padding: 14px 24px;
+}
+
+.not-set {
+    color: #c55;
+    font-style: italic;
+}
+
+/* add sorting icons to gridview sort links */
+a.asc:after, a.desc:after {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    padding-left: 5px;
+}
+
+a.asc:after {
+    content: /*"\e113"*/ "\e151";
+}
+
+a.desc:after {
+    content: /*"\e114"*/ "\e152";
+}
+
+.sort-numerical a.asc:after {
+    content: "\e153";
+}
+
+.sort-numerical a.desc:after {
+    content: "\e154";
+}
+
+.sort-ordinal a.asc:after {
+    content: "\e155";
+}
+
+.sort-ordinal a.desc:after {
+    content: "\e156";
+}
+
+.grid-view th {
+    white-space: nowrap;
+}
+
+.hint-block {
+    display: block;
+    margin-top: 5px;
+    color: #999;
+}
+
+.error-summary {
+    color: #a94442;
+    background: #fdf7f7;
+    border-left: 3px solid #eed3d7;
+    padding: 10px 20px;
+    margin: 0 0 15px 0;
+}
+
+/******* This is where custom css to override bootstrap will go ******/
+
+.btn-sort {
+	font-weight: 700;
+	font-size: 12pt;
+	margin: 0 0 -7px 0;
+}
+
+button, .btn-primary {
+	background-color: #dc9b29;
+    border-color: #ce9228;
+}
+
+button:hover, .btn-primary:hover {
+	background-color: #feca3d;
+    border-color: #eeb221;
+}
+
+button:active, .btn-primary:active, button:focus, .btn-primary:focus, button:active:focus, .btn-primary:active:focus, button:active:hover, .btn-primary:active:hover  {
+	background-color: #feca3d;
+    border-color: #eeb221;
+    
+}
+
+.btn-link {
+	color: #dc9b29;
+}
+
+.btn-link:hover {
+	color: #eeb221;
+}
+
+.btn-link:active, .btn-link:focus {
+	color: #eeb221;
+}
+
+.btn-outline-primary {
+	background-color: #eee;
+	border-color: #dc9b29;
+}
+
+.btn-outline-primary:hover {
+	background-color: #dc9b29;
+	border-color: #eeb221;
+}
+
+.btn-outline-primary:active {
+	background-color: #eee;
+	border-color: #eeb221;
+}
+
+
+a {
+	color: #dc9b29;
+}
+
+a:hover {
+	color: #eeb221;
+}
+
+a:active, a:afocus {
+	color: #eeb221;
+}
+
+
+/*
+.breadcrumb {
+	background-color: #444;
+}
+
+
+body {
+	background-color: #444;
+}
+*/
+
+/************************** Gloabal **************************/
+
+.wrap {
+	background-color: #aeaeae;
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#1d1e1e+0,314240+100 */
+	background: #1d1e1e; /* Old browsers */
+	background: -moz-linear-gradient(top, #1d1e1e 0%, #314240 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, #1d1e1e 0%,#314240 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, #1d1e1e 0%,#314240 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+
+footer > .container {
+	overflow-y: hidden;
+}
+
+
+
+/************************** Forms **************************/
+
+.form-group {
+	margin-bottom: 5px;
+}
+
+/*
+form {
+	background-color: #fafafa;
+	padding: 10px;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+}
+*/
+.page-panel {
+	background-color: #fafafa;
+	padding: 5px 5px;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+}
+
+.container {
+    width: 99%;
+}
+
+h1, .h1, h2, .h2, h3, .h3 {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+/* 
+ div[class^="site-"], div[class*=" site-"] {
+	background-color: #fafafa;
+	padding: 10px;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+}
+ */
+
+.body-content > .row > .col-lg-4 {
+	padding-bottom: 15px;
+}
+
+.small-panel {
+
+	box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    
+	background-color: #fafafa;
+	padding: 5px 15px 15px 15px;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+}
+
+
+.form-control[readonly] {
+	background-color: #fff8dd;
+}
+
+.table-striped > tbody > tr, .table-striped > thead {
+    background-color: #eee;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #fefefe;
+}
+
+/************************** Map **************************/
+
+.leaflet-container {
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+
+
+/************************** Buttons **************************/
+
+.btn-block {
+	margin-bottom: 15px;
+}
+/*
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #dc9b29;
+}
+
+
+.navbar-inverse .navbar-nav > li > a:hover {
+    color: #eeb221;
+}
+
+
+.navbar-inverse .navbar-brand {
+    color: #eeb221;
+    font-weight: 700;
+}
+
+*/
+
+/************************** Nav Bar **************************/
+
+.navbar-inverse {
+    background-color: #111;
+    border-color: #080808;
+    border-radius: 0;
+}
+
+.navbar-nav > li > .dropdown-menu {
+    background-color: #101010;
+}
+
+.dropdown-menu > li > a {
+    color: #9d9d9d;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover:focus {
+    color: #eeb221;
+}
+
+.navbar-inverse .navbar-nav > li > a:active:focus {
+    color: #eeb221;
+}
+
+.navbar-inverse .navbar-nav > li > a:active {
+    color: #eeb221;
+}
+
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+    color: #eeb221;
+}
+
+
+.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {
+    color: #fff;
+    text-decoration: none;
+    background-color: #dc9b29;
+    outline: 0;
+}
+
+
+/************************** Search Forms **************************/
+
+#submitNext {
+	float: right;
+}
+
+#submitNew {
+	margin-bottom: 20px;
+}
+
+.results-table {
+	position: relative;
+	width: 100%;
+}
+
+.results-buttons {
+	height: 30px;
+}
+
+.footer-text {
+	margin: 0 0 0 0;
+	font-size: 9.25pt;
+}
+
+.footer > .container {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.footer-text.pull-right {
+	margin: 8px 0 0 0;
+}
+
+.footer {
+	padding-top: 13px;
+}
+
+@media only screen and (max-width: 720px) {
+    .results-table {
+		position: relative;
+		width: 100%;
+		overflow-x: scroll;
+	}
+	
+	table {
+		font-size: 85%;
+	}
+	.query-text {
+		font-size: 75%;
+	}
+	.shrink-text {
+		font-size: 75%;
+	}
+	
+	#submitNew {
+		margin-bottom: 20px;
+		margin-left: 30px;
+		margin-right: 30px;
+		width: 93.5%;
+	}
+}
+
+@media only screen and (max-width: 991px) {
+	#submitNew {
+		margin-bottom: 20px;
+		margin-left: 30px;
+		margin-right: 30px;
+		width: 96%;
+	}
+}
+
+#spatialmodel-index_to_search .radio, #spatialmodel-index_to_search_circle .radio {
+	display: inline;
+	padding-left: 1em;
+	font-size: 110%;
+}
+
+#mmsimodel-index_to_search .radio {
+	display: inline;
+	padding-left: 1em;
+	font-size: 110%;
+}
+
+.tooltip-inner { max-width: 350px; width: 300px; }
+
+
+/* 
+@media only screen and (max-device-width: 720px) {
+		.results-table {
+			position: relative;
+			width: 100%;
+			overflow-x: scroll;
+		}
+	}
+ */
+ 
+ /* specific to the fishing dates page */
+ 
+ .field-month, .field-date_sort, .field-page_width {
+ 	margin: 0;
+ 	padding: 0;
+ 	height: 0;
+ }

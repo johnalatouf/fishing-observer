@@ -1,0 +1,14 @@
+/* css styling for the Cesium infobox */
+
+.cesium-infoBox-defaultTable {
+	padding: 2px;
+	font-size: 13px;
+}
+
+@media all and (min-width:0px) and (max-width: 210px) {
+	.cesium-infoBox-description {
+		font-size: 10px;
+	}
+	
+	
+}

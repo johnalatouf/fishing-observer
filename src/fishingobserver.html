@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<title>Fishing Activity Viewer</title>
+    
+    
+    
+<link href="./js/cesiumjs/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+<link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" rel="stylesheet">
+<link href="./css/nouislider.min.css" rel="stylesheet">
+<link href="./css/bootstrap.css" rel="stylesheet">
+<link href="./css/site.css" rel="stylesheet">
+
+<style>
+  #spin {
+	width: 100%;
+	height: 100%;
+	margin: auto; 
+	position: absolute;
+	z-index: 100;
+	pointer-events:none;
+  }
+  
+  #spin-csv {
+	width: 100%;
+	height: 100%;
+	margin: -8px 0 0 0;
+	position: absolute;
+	z-index: 100;
+	pointer-events:none;
+  }
+  
+  #spin-mmsi {
+	width: 100%;
+	height: 100%;
+	margin: -8px 0 0 0;
+	position: absolute;
+	z-index: 100;
+	pointer-events:none;
+  }
+  
+  #full_csv_spin, #csv_spin {
+	/*width: 90%;
+	height: 100%;*/
+	margin: auto; 
+	position: absolute;
+	z-index: 100;
+	visibility: hidden;
+  }
+  #mmsi_tooltip {
+	padding: 10px;
+	margin: auto; 
+	position: absolute;
+	z-index: 99;
+	left: 100px;
+	top: 200px;
+	background-color: rgba(20, 20, 20, 0.3);
+	color: rgba(20, 20, 20, 1);
+	font-size: 10pt;
+  }
+  #total_div {
+	padding: 5px;
+	margin: 5px auto auto auto; 
+	position: absolute;
+	z-index: 99;
+	left: 234px;
+	/* top: 10px; */
+	width: 60%;
+	background-color: rgba(255, 255, 255, 0.3);
+	color: rgba(51, 80, 104, 1);
+	font-size: 10px;
+	visibility: hidden;
+  }
+  
+  #zoom_legend {
+	padding: 5px;
+	margin: 5px auto auto auto;
+	position: absolute;
+	z-index: 99;
+	right: 74px;
+	width: 140px;
+	background-color: rgba(255, 255, 255, 0.3);
+	color: rgba(51, 80, 104, 1);
+	font-size: 10px;
+	visibility: hidden;
+	border: solid 1px #444;
+  }
+  
+  #date_div {
+	padding: 10px;
+	margin: auto; 
+	position: absolute;
+	z-index: 99;
+	left: 280px;
+	background-color: rgba(255, 255, 255, 0.3);
+	color: rgba(51, 80, 104, 0.3);
+	font-size: 10px;
+  }
+  
+  .mmsi_box {
+	width: 130px;
+	max-width: 130px;
+	left: 10px;
+	top: 10px;
+	position: absolute;
+	z-index: 95;
+  }
+  
+  .week_slider label {
+	font-size: 8.5pt;
+	font-weight: bold;
+	letter-spacing: -0.2px;
+  }
+  
+  .week_slider input {
+	color: rgba(120, 20, 210, 1);
+	height: 0;
+	visibility: hidden;
+  }
+  
+  /*
+  .bk-layout-scale_width, .bk-root {
+	position: absolute;
+  }*/
+  #csv_result_div {
+	padding: 10px;
+	margin: auto; 
+	position: absolute;
+	z-index: 99;
+	left: 270px;
+	top: 500px;
+	background-color: rgba(255, 255, 255, 0.75);
+	color: rgba(51, 80, 104, 1);
+	font-size: 10pt;
+	visibility: hidden;
+	border-radius: 6px;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	border-bottom-right-radius: 6px;
+	border-bottom-left-radius: 6px;
+	border: 1px solid #EEEEEE;
+  }
+  
+  #csv_result_div_full {
+	padding: 10px;
+	margin: auto; 
+	position: absolute;
+	z-index: 99;
+	left: 270px;
+	top: 630px;
+	background-color: rgba(255, 255, 255, 0.75);
+	color: rgba(51, 80, 104, 1);
+	font-size: 10pt;
+	visibility: hidden;
+	border-radius: 6px;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	border-bottom-right-radius: 6px;
+	border-bottom-left-radius: 6px;
+	border: 1px solid #EEEEEE;
+  }
+
+  #split_val_selector {    
+	font-size: 8pt;
+	padding: 0;
+	/* margin: 35px 0 0 3px; */
+	top: 25px;
+	left: 10px;
+	color: #EEEEEE;
+	/*position: absolute;
+	z-index: 999;*/
+  }
+  
+  #date-picker-div {
+	font-size: 8pt;
+	padding: 5px;
+	/* margin: 35px 0 0 3px; */
+	border: solid 1px #444;
+	background-color: rgba(40,40,40,0.7);
+	top: 100px;
+	left: 10px;
+	color: #EEEEEE;
+	position: absolute;
+	z-index: 99;
+  }
+  
+  #split_val_selector > select {
+	background-color: #333333;
+  }
+  
+  .ui-datepicker-calendar {
+	display: none;
+}
+
+.ui-datepicker-current {
+	display: none;
+}
+
+.ui-datepicker-close {
+	background: #303336;
+	border: 1px solid #444;
+	color: #edffff;
+	fill: #edffff;
+	border-radius: 4px;
+}
+
+
+.ui-datepicker-title {
+	clear: both;
+}
+
+#ui-datepicker-div {
+	border: solid 1px #444;
+	background-color: rgba(40,40,40,0.7);
+	font-size: 9pt;
+}
+
+.ui-datepicker-month {
+	background-color: #333333;
+	width: 48%;
+	margin: 0 0 10px 0;
+	
+}
+.ui-datepicker-year {
+	background-color: #333333;
+	width: 48%;
+	margin: 0 0 10px 0;
+}
+
+#startDate {
+	border: solid 1px #444;
+	background-color: rgba(40,40,40,0.7);
+	color: white;
+	display: inline-block;
+	vertical-align: middle;
+	width: 120px;
+	height: 32px;
+	margin: 0;
+	padding: 0 0 0 32px;
+	border-radius: 0;
+	box-sizing: border-box;
+	transition: width ease-in-out 0.25s,background-color 0.2s ease-in-out;
+	-webkit-appearance: none;
+	
+}
+
+#startDateIcon {
+	font-size: 15pt;
+	position: absolute;
+	margin: -28px 0 0 5px;
+}
+
+.toolbar-date {
+	display: block;
+	position: absolute;
+	top: 60px;
+	left: 10px;
+	font-size: 8pt;
+}
+
+.ui-datepicker-prev {
+	float: left;
+}
+
+.ui-datepicker-next {
+	float: right;
+}
+
+#month-button {
+	position: absolute;
+	z-index: 999;
+	font-size: 8pt;
+	width: 32px;
+	/*padding: 3px 4px 3px 4px;*/
+	left: 5px;
+	top: 60px;
+}
+
+#video-button {
+	
+	font-size: 8pt;
+	width: 32px;
+}
+
+/******* end date picker *******/
+
+/******* month/week picker *******/
+
+.toolbar-month-week {
+	display: block;
+	position: absolute;
+	top: 130px;
+	left: 10px;
+	font-size: 8pt;
+}
+
+/******* end month/week picker *******/
+
+/******* zoom buttons *******/
+
+.zoom-toolbar-button {
+	box-sizing: border-box;
+	width: 32px;
+	height: 32px;
+	border-radius: 14%;
+	padding: 0;
+	vertical-align: middle;
+	z-index: 0;
+}
+
+.zoom-button {
+	display: inline-block;
+	position: relative;
+	background: #303336;
+	border: 1px solid #444;
+	color: #edffff;
+	fill: #edffff;
+	border-radius: 4px;
+	/*padding: 5px 12px;*/
+	margin: 2px 3px;
+	cursor: pointer;
+	overflow: hidden;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.zoom-button:hover {
+	color: #fff;
+	fill: #fff;
+	background: #48b;
+	border-color: #aef;
+	box-shadow: 0 0 8px #fff;
+}
+
+.zoom-button:active {
+	color: #000;
+	fill: #000;
+	background: #adf;
+	border-color: #fff;
+	box-shadow: 0 0 8px #fff;
+}
+
+/******* end zoom buttons *******/
+
+/******* month_week buttons *******/
+
+.month_week-toolbar-button {
+	box-sizing: border-box;
+	width: 32px;
+	height: 32px;
+	border-radius: 14%;
+	padding: 0;
+	vertical-align: middle;
+	z-index: 0;
+}
+
+.month_week-button {
+	display: inline-block;
+	position: relative;
+	background: #303336;
+	border: 1px solid #444;
+	color: #edffff;
+	fill: #edffff;
+	border-radius: 4px;
+	padding: 5px 12px;
+	margin: 2px 3px;
+	cursor: pointer;
+	overflow: hidden;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.month_week-button:hover {
+	color: #fff;
+	fill: #fff;
+	background: #48b;
+	border-color: #aef;
+	box-shadow: 0 0 8px #fff;
+}
+
+/*.month_week-button:active {
+	color: #000;
+	fill: #000;
+	background: #adf;
+	border-color: #fff;
+	box-shadow: 0 0 8px #fff;
+}*/
+
+.selected-btn-mw {
+	color: #000;
+	fill: #000;
+	background: #adf;
+	border-color: #fff;
+	box-shadow: 0 0 8px #fff;
+}
+
+/******* end month_week buttons *******/
+
+#big-data {
+	position: absolute;
+	bottom: 35px;
+	right: 10px;
+	width: 110px;
+	max-width: 17%;
+}
+
+#big-data img {
+	/*width: 110px;
+	max-width: 17%;*/
+	width: 100%;
+}
+
+/******* Legends *******/
+
+
+
+
+.hm-col-orange {
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#D6E8EB+0,FF6A00+100 */
+	background: #FF6A00; /* Old browsers */
+	background: -moz-linear-gradient(left, #D6E8EB 0%, #FF6A00 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(left, #D6E8EB 0%,#FF6A00 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to right, #D6E8EB 0%,#FF6A00 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#D6E8EB", endColorstr="#FF6A00",GradientType=1 ); /* IE6-9 */
+}
+
+.hm-col-yellow {
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#D6E8EB+0,FF6A00+100 */
+	background: #ddad00; /* Old browsers */
+	background: -moz-linear-gradient(left, #D6E8EB 0%, #ddad00 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(left, #D6E8EB 0%,#ddad00 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to right, #D6E8EB 0%,#ddad00 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#D6E8EB", endColorstr="#ddad00",GradientType=1 ); /* IE6-9 */
+}
+
+.hm-col-green {
+	
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#D6E8EB+0,009951+100 */
+	background: #009951; /* Old browsers */
+	background: -moz-linear-gradient(left, #D6E8EB 0%, #009951 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(left, #D6E8EB 0%,#009951 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to right, #D6E8EB 0%,#009951 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#D6E8EB", endColorstr="#009951",GradientType=1 ); /* IE6-9 */
+}
+
+.hm-col-red {
+	
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#D6E8EB+0,009951+100 */
+	background: #009951; /* Old browsers */
+	background: -moz-linear-gradient(left, #D6E8EB 0%, rgb(163, 0, 0) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(left, #D6E8EB 0%,rgb(163, 0, 0) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to right, #D6E8EB 0%,rgb(163, 0, 0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#D6E8EB", endColorstr="rgb(163, 0, 0)",GradientType=1 ); /* IE6-9 */
+}
+
+.hm-col-blue {
+	
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#D6E8EB+0,009951+100 */
+	background: #009951; /* Old browsers */
+	background: -moz-linear-gradient(left, #D6E8EB 0%, rgb(32, 32, 255) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(left, #D6E8EB 0%,rgb(32, 32, 255) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to right, #D6E8EB 0%,rgb(32, 32, 255) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#D6E8EB", endColorstr="rgb(32, 32, 255)",GradientType=1 ); /* IE6-9 */
+}
+
+.hm-col-purple {
+	
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#D6E8EB+0,009951+100 */
+	background: #009951; /* Old browsers */
+	background: -moz-linear-gradient(left, #D6E8EB 0%, rgb(142, 30, 255) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(left, #D6E8EB 0%,rgb(142, 30, 255) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to right, #D6E8EB 0%,rgb(142, 30, 255) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#D6E8EB", endColorstr="rgb(142, 30, 255)",GradientType=1 ); /* IE6-9 */
+}
+
+
+
+#hm-legend {
+	position: absolute;
+	top: 190px;
+	left: 10px;
+	font-size: 7pt;
+	background-color: rgba(40,40,40,0.7);
+	color: #EEEEEE;
+	text-align: justify;
+	/*text-align-last: justify;*/
+	border: solid 1px #444;
+	padding: 1px 2px 12px 2px;
+	height: 70px;
+}
+
+#hm-change {
+	position: absolute;
+	top: 190px;
+	left: 150px;
+	width: 20px;
+	font-size: 7pt;
+	/*background-color: rgba(40,40,40,0.7);*/
+	color: #EEEEEE;
+	text-align: justify;
+	/*text-align-last: justify;
+	border: solid 1px #444;*/
+	padding: 1px 2px 12px 2px;
+	height: 70px;
+}
+
+#color-picker {
+	position: absolute;
+	top: 190px;
+	left: 190px;
+	font-size: 7pt;
+	color: #EEEEEE;
+	padding: 1px 2px 12px 2px;
+	width: 20px;
+}
+
+.hm-color-button {
+	background: none;
+	border: none;
+	margin: 2px 0 0 0;
+	padding: 1px 1px 0 1px;
+	color: #333333;
+}
+
+.hm-color-button:hover {
+	background: none;
+	border: none;
+	margin: 2px 0 0 0;
+	padding: 1px 1px 0 1px;
+	color: #333333;
+}
+
+.hm-color-svg:hover {
+	stroke: #FFF;
+	fill: #aef;
+}
+
+#hm-legend-high {
+	float: right;
+}
+
+.hm-type {
+	width: 130px;
+	margin: 1px;
+	padding: 0 0 0 2px;
+	color: #333333;
+}
+
+.hm-selected {
+	color: #EEEEEE;
+	font-weight: bold;
+	text-shadow: 0px 0px 2px rgba(150, 150, 150, 1);
+}
+
+
+
+#ship-legend {
+	position: absolute;
+	top: 190px;
+	left: 10px;
+	font-size: 7pt;
+	background-color: rgba(40,40,40,0.7);
+	color: #EEEEEE;
+	text-align: justify;
+	text-align-last: justify;
+	padding: 1px 2px 2px 2px;
+	border: solid 1px #444;
+}
+
+.cesium-infoBox-camera {
+	pointer-events: none;
+}
+
+#ship-legend > table > tbody > tr > td, th {
+	text-align: right;
+	padding: 0 2px 0 2px;
+}
+
+#hm-legend-mid {
+	position; absolute;
+	z-index: 111;
+	width: 100%;
+	text-align: center;
+	margin: -13px auto;
+	
+}
+
+#hm-legend-ten {
+	position; absolute;
+	z-index: 111;
+	width: 100%;
+	text-align: center;
+	margin: -13px auto;
+	text-align-last: center;
+}
+
+.hm-legend-tick {
+	position: absolute;
+	bottom: 28.5pt;
+	background: #EEEEEE;
+	height: 6px;
+	width: 1px;
+}
+
+
+
+.hm-refresh {
+	position: absolute;
+	top: 45px;
+	width: 130px;
+	margin: 0;
+	text-align: center;
+	padding: 0 3px 0 3px;
+	height: 20px;
+	text-align-last: center;
+}
+
+.go-refresh {
+	
+	width: 100%;
+	margin: 10px 0 0 0;
+	text-align: center;
+	padding: 0 3px 0 3px;
+	height: 20px;
+}
+
+/******* end Legends *******/
+
+/******* dts slider *******/
+
+#dtsSlider, #dtsSlider-text {
+	position: absolute;
+	top: 250px;
+	left: 30px;
+	font-size: 8pt;
+	color: #EEEEEE;
+	/*width: 100px;*/
+	height: 190px;
+	
+}
+
+.noUi-handle {
+	background: #303336;
+	border: 1px solid #edffff;
+	color: #edffff;
+	fill: #edffff;
+	box-shadow: inset 0 0 1px #444, inset 0 1px 7px #444, 0 3px 6px -3px #444;
+}
+
+.noUi-vertical .noUi-tooltip {
+	left:32px;
+	right: -62px;
+	bottom: initial;
+	background: #303336;
+	border: 1px solid #444;
+	color: #edffff;
+	fill: #edffff;
+}
+
+#dtsSlider {
+	font-size: 7pt;
+	background-color: rgba(40,40,40,0.7);
+	color: #EEEEEE;
+	/*width: 100px;*/
+	transform: scale(0.7, 0.7);
+	left: 33px;
+}
+
+#dtsSlider-text {
+	font-size: 7pt;
+	color: #EEEEEE;
+	/*width: 100px;*/
+	height: 190px;
+	padding: 0 40px 0 47px;
+	text-shadow: 0 0 2px #000000;
+}
+
+
+
+
+.noUi-horizontal .noUi-handle {
+	/*transform: scale(0.5, 1);*/
+}
+
+.vertical-text {
+	transform: rotate(90deg);
+	transform-origin: left top 0;
+}
+
+/******* end dts slider *******/
+
+/******* mmsi table *******/
+
+#mmsi-table {
+	
+	overflow-y: scroll;
+	height: 220px;
+	
+}
+
+#mmsi-popup {
+	border: solid 1px #444;
+	background-color: rgba(40,40,40,0.7);
+	color: white;
+	color: white;
+	font-size: 8pt;
+	position: absolute;
+	bottom: 60px;
+	right: 40px;
+	display:none;
+	max-height: 90%;
+	pointer-events: auto;
+}
+
+.toolbar-bottom {
+	
+	position: absolute;
+	bottom: 50px;
+	height: 50%;
+	width: 80%;
+	right: 5px;
+	font-size: 8pt;
+	pointer-events: none;
+}
+
+
+
+#button-mmsi {
+	bottom: 57px;
+	right: 0;
+	position: absolute;
+	pointer-events: auto;
+}
+
+#mmsi-table td {
+	padding: 0 2px 0 2px;
+	/*border: 1px solid rgba(80,80,80,1);*/
+}
+
+.table-country {
+	max-width: 90px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#mmsi-table th {
+	padding: 0 2px 0 2px;
+	border-bottom: 1px solid rgba(80,80,80,1);
+}
+
+
+.mmsi-tr:nth-child(even) {background-color: rgba(40,40,40,0.1)}
+.mmsi-tr:nth-child(odd) {background-color: rgba(160,160,160,0.1)}
+
+
+
+.mmsi-highlight {
+	background-color: rgba(250,250,250,0.5);
+}
+
+.mmsi-hidden {
+	color: #888888;
+}
+
+.mmsi-table-key {
+	font-color: #FFEEEE;
+	font-weight: 800;
+}
+
+.mmsi-asc {
+	background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 51%, rgba(255,255,255,0) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 51%,rgba(255,255,255,0) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 51%,rgba(255,255,255,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#ffffff", endColorstr="#00ffffff",GradientType=0 ); /* IE6-9 */
+}
+
+.mmsi-desc {
+	background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 54%, rgba(255,255,255,1) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(255,255,255,0) 54%,rgba(255,255,255,1) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,0) 54%,rgba(255,255,255,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#00ffffff", endColorstr="#ffffff",GradientType=0 ); /* IE6-9 */
+}
+
+/******* end mmsi table *******/
+
+/******* mmsi scroll bar *******/
+
+#mmsi-table::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: #444;
+}
+
+#mmsi-table::-webkit-scrollbar
+{
+	width: 12px;
+	background-color: #F5F5F5;
+}
+
+#mmsi-table::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #aaa;
+}
+
+/******* end mmsi scroll bar *******/
+
+/******* csv popup *******/
+
+#button-csv, .zoom-button {
+	font-size: 14pt;
+	font-weight: bold;
+}
+
+#csv-popup {
+	/*border: solid 1px #444;
+	background-color: rgba(40,40,40,0.7);*/
+	color: white;
+	color: white;
+	font-size: 8pt;
+	position: absolute;
+	top: 40px;
+	right: 34px;
+	display:none;
+	pointer-events: auto;
+	z-index: 999;
+}
+
+#csv-response {
+	border: solid 1px #444;
+	background-color: rgba(40,40,40,0.7);
+	color: white;
+	color: white;
+	font-size: 8pt;
+	position: absolute;
+	top: 62px;
+	left: 160px;
+	width: 200px;
+	display:none;
+	pointer-events: auto;
+	z-index: 999;
+	padding: 3px 5px 3px 5px;
+}
+
+#csv-response > button {
+	left: 135px;
+}
+
+#vessel-button {
+	position: absolute;
+	z-index: 999;
+	font-size: 8pt;
+	width: 80px;
+	padding: 3px 4px 3px 4px;
+	right: 10px;
+	top: 140px;
+}
+
+
+
+/******* end csv popup *******/
+
+.wrap > .container {
+	/*padding: 55px 15px 20px;*/
+	padding: 0 0 0 0; 
+}
+
+.wrap {
+	min-height: 100%;
+	height: 100%;
+	margin: 0 auto 0;
+	padding: 0 0 0;
+	padding-bottom: 53px;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  padding: 0 0 0 0; 
+  margin: 0 0 0 0;
+}
+
+/*@import url(../Build/Cesium/Widgets/widgets.css);*/
+#cesiumContainer {
+  /*width: 97%; 
+  height: 90%; */
+  width: 100%;
+  height: 100%;
+  padding: 0; 
+  overflow: hidden;
+  margin: 0 auto; 
+  margin-top: 53px;
+  
+}
+
+canvas {
+	image-rendering: -moz-crisp-edges;
+	image-rendering: -webkit-crisp-edges;
+	image-rendering: pixelated;
+}
+
+.toolbar-left {
+	display: block;
+	position: absolute;
+	top: 60px;
+	right: 120px;
+	font-size: 8pt;
+}
+
+#rect-coords {
+	display: block;
+	position: absolute;
+	top: 63px;
+	right: 235px;
+	font-size: 8pt;
+	color: rgba(255, 255, 255, 0.75);
+	text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+.toolbar-left > button {
+	margin: 0 1px;
+}
+
+#toolbar-right {
+	display: block;
+	position: absolute;
+	bottom: 170px;
+	right: 10px;
+	font-size: 8pt;
+	width: 33px;
+}
+
+.toolbar-popup-button {
+	box-sizing: border-box;
+	width: 32px;
+	height: 20px;
+	border-radius: 3px;
+	padding: 0;
+	vertical-align: middle;
+	z-index: 0;
+}
+
+#button-mmsi-all {
+	width: 60px;
+}
+
+.cesium-button:focus {
+	color: #fff;
+	fill: #fff;
+	border-color: #ea4;
+	outline: none;
+	background-color: rgba(40,40,40,1);
+}
+
+.cesium-button:active {
+	color: #fff;
+	fill: #fff;
+	border-color: #ea4;
+	outline: none;
+	background-color: rgba(40,40,40,1);
+}
+
+.cesium-infoBox-description {
+	padding-right: 90px;
+}
+
+/*.cesium-credit-text {
+	max-width: 38%;
+}*/
+
+.cesium-infoBox {
+	background: rgba(38,38,38,0.5);
+}
+
+.cesium-infoBox-title {
+	background: rgba(84,84,84,0.5);
+}
+
+.cesium-infoBox-iframe {
+	padding-right: 90px;
+}
+
+
+/*  shrink and adjust positions for mobile */
+@media all and (min-width:0px) and (max-width: 568px) {
+  #dtsSlider, #dtsSlider-text, #dtmSlider, #dtmSlider-text {
+	zoom: 70%;
+	margin-top: 71px;
+	height: 145px;
+  }
+  
+  #dtsSlider-text {
+	margin-top: 32px;
+  }
+  
+  #hm-legend, #ship-legend, #hm-change {
+	zoom: 70%;
+	margin-top: 60px;
+  }
+  
+  #ship-legend {
+	height: 47px;
+  }
+  
+  #ship-legend > table > tbody > tr > td, th {
+	font-size: 7px;
+  }
+  
+  #hm-legend {
+	height: 75px;
+  }
+  
+  #hm-change {
+	margin-top: 57px;
+  }
+  
+  #date-picker-div {
+	zoom: 70%;
+	margin-top: 50px;
+  }
+  
+  .cesium-viewer-bottom {
+	margin-left: 25px;
+	margin-bottom: 3px;
+	padding-right: 50px;
+	zoom: 70%;
+  }
+
+  #rect-coords {
+	zoom: 30%;
+	margin-top: 120px;
+	margin-right: 410px;
+	width: 20%;
+  }
+  
+  .hm-refresh {
+	margin-top: 6px;
+  }
+  
+  #hm-legend-ten {
+	margin: -18px auto;
+  }
+  
+  #hm-legend-high {
+	margin-top: -4px;
+  } 
+  
+  #toolbar-right {
+	bottom: 150px;
+  }
+  #mmsi-table {
+	height: 100px;
+  }
+  .toolbar-bottom {
+	width: 70%;
+  }
+  
+  #vessel-button {
+	zoom: 70%;
+	margin-right: 0;
+	right: 1px;
+	margin-top: 80px;
+  }
+
+  .cesium-infoBox-iframe {
+	padding-right: 60px;
+  }
+  
+}
+	</style>
+</head>
+<body>
+
+	<div class="wrap">	
+		<div class="container">
+			<div id="spin"></div>
+
+			<!----------------------------cesium map --------------------------------->
+
+			<div id="cesiumContainer"></div>
+			<div class="toolbar-left">
+				<button onclick="saveImage();" class="cesium-button cesium-toolbar-button" data-toggle="tooltip" title="Download the current view as a png" data-placement="bottom">
+					<svg width="28" height="30.000000000000004" xmlns="http://www.w3.org/2000/svg">
+					<!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+					<g>
+						<title>Layer 1</title>
+						<rect stroke="#edffff" rx="3" id="svg_34" height="15.666636" width="22.166623" y="9.250011" x="2.91669" stroke-width="2" fill="#edffff"/>
+						<rect rx="9" id="svg_52" height="9.166648" width="12.166642" y="4.916687" x="7.750014" stroke-width="2" fill="#edffff"/>
+						<ellipse stroke="#333333" ry="4.916657" rx="5.333323" id="svg_53" cy="17.166662" cx="13.750002" stroke-width="2" fill="#edffff"/>
+						<ellipse stroke="#333333" ry="1.33333" rx="1.333331" id="svg_54" cy="12.083339" cx="21.916652" fill="#edffff"/>
+						<ellipse ry="0.666665" rx="1.333331" id="svg_55" cy="7.416683" cx="21.916652" fill="#edffff"/>
+					</g>
+					</svg>
+				</button>
+			</div>
+
+			<div id="toolbar-right">
+				<button onclick="zoomIn();" class="zoom-button zoom-toolbar-button">+</button>
+				<button onclick="zoomOut();" class="zoom-button zoom-toolbar-button">-</button>
+			</div>
+
+			<div id="csv-response">
+				<button onclick="toggleCSVResponse(false);" class="cesium-button">close</button>
+			</div>
+
+			<button onclick="showHeatMapSplit();" class="cesium-button cesium-toolbar-button" id="month-button" class="toolbar-date white-tooltip"  data-toggle='tooltip' title='Select the month and pixel size for the heatmap, measured in degrees (1° lat/lon ≈ 111 km)' data-placement="right">
+				<svg width="28" height="30.000000000000004" xmlns="http://www.w3.org/2000/svg">
+					<g>
+						<title>Layer 1</title>
+						<rect rx="3" stroke="#edffff" id="svg_34" height="19.833294" width="20.999958" y="6.58335" x="3.583355" stroke-width="2" fill="none"/>
+						<rect rx="3" id="svg_35" height="6.999986" width="3.16666" y="2.916691" x="7.583348" stroke-width="2" fill="#edffff"/>
+						<rect rx="3" id="svg_36" height="6.999986" width="3.16666" y="2.916691" x="17.249995" stroke-width="2" fill="#edffff"/>
+						<rect stroke="null" id="svg_38" height="2.33333" width="1.999995" y="12.250006" x="9.916676" stroke-width="2" fill="#edffff"/>
+						<rect stroke="null" id="svg_39" height="2.33333" width="1.999995" y="12.250006" x="13.250003" stroke-width="2" fill="#edffff"/>
+						<rect stroke="null" id="svg_40" height="2.33333" width="1.999995" y="12.250006" x="16.583329" stroke-width="2" fill="#edffff"/>
+						<rect stroke="null" id="svg_41" height="2.33333" width="1.999995" y="12.250006" x="19.916656" stroke-width="2" fill="#edffff"/>
+						<rect stroke="null" id="svg_42" height="2.33333" width="1.999995" y="15.916665" x="6.58335" stroke-width="2" fill="#edffff"/>
+						<rect stroke="null" id="svg_43" height="2.33333" width="1.999995" y="15.916665" x="9.916676" stroke-width="2" fill="#edffff"/>
+						<rect stroke="null" id="svg_44" height="2.33333" width="1.999995" y="15.916665" x="13.250003" stroke-width="2" fill="#edffff"/>
+						<rect stroke="null" id="svg_45" height="2.33333" width="1.999995" y="15.916665" x="16.583329" stroke-width="2" fill="#edffff"/>
+						<rect stroke="null" id="svg_46" height="2.33333" width="1.999995" y="15.916665" x="19.916656" stroke-width="2" fill="#edffff"/>
+						<rect stroke="null" id="svg_47" height="2.33333" width="1.999995" y="19.916657" x="6.58335" stroke-width="2" fill="#edffff"/>
+						<rect stroke="null" id="svg_48" height="2.33333" width="1.999995" y="19.916657" x="9.916676" stroke-width="2" fill="#edffff"/>
+						<rect stroke="null" id="svg_49" height="2.33333" width="1.999995" y="19.916657" x="13.250003" stroke-width="2" fill="#edffff"/>
+					</g>
+				</svg>
+			</button>
+
+			<div id="date-picker-div" data-toggle='tooltip' title='Select the month and pixel size for the heatmap, measured in degrees (1° lat/lon ≈ 111 km)' data-placement="right">
+
+				<select class="ui-datepicker-month">
+					<option value="0" selected="selected">Jan</option>
+					<option value="1">Feb</option>
+					<option value="2">Mar</option>
+					<option value="3">Apr</option>
+					<option value="4">May</option>
+					<option value="5">Jun</option>
+					<option value="6">Jul</option>
+					<option value="7">Aug</option>
+					<option value="8">Sep</option>
+					<option value="9">Oct</option>
+					<option value="10">Nov</option>
+					<option value="11">Dec</option>
+				</select>
+
+				<select class="ui-datepicker-year">
+					<option value="2012" selected="selected">2012</option>
+					<option value="2013">2013</option>
+					<option value="2014">2014</option>
+					<option value="2015">2015</option>
+					<option value="2016">2016</option>
+				</select>
+
+				<div id='split_val_selector'>Heatmap Detail 
+						<select id='split_sel'>
+							<option value=1>1</option>
+							<option value=2>1/2</option>
+							<option value=4 selected>1/4</option>
+							<option value=8>1/8</option>
+							<option value=8>1/16</option>
+						</select> ° </br>
+					<button onclick="drawHeatmaps(true); cameraHasMoved();" class="cesium-button go-refresh">Go</button>
+				</div>
+			</div>
+
+			<!----------------------------heatmap change buttons --------------------------------->
+
+			<div id="hm-change"  data-toggle='tooltip' title='Change the display colors for vessel types' data-placement="right">
+				<button onclick="openColorPicker('Longliner');" class="hm-color-button">
+					<svg width="10" height="10" xmlns="http://www.w3.org/2000/svg">
+					<!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+					<g>
+					<title>Layer 1</title>
+					<path stroke-opacity="0.53" stroke="#0f0f00" id="hmsvg_1" d="m3.933707,8.834547c-1.285643,-0.412845 -2.20715,-1.72465 -1.997729,-2.843858c0.132055,-0.705745 2.91808,-4.990112 3.161388,-4.861605c0.079413,0.041943 0.786085,1.040808 1.570383,2.219702c1.256363,1.888463 1.425996,2.240603 1.425996,2.960221c0,1.458636 -1.366003,2.653424 -3.006173,2.62938c-0.478625,-0.007017 -0.997865,-0.053745 -1.153866,-0.10384l0,0zm1.288069,-0.73364c0.042555,-0.188842 -0.056852,-0.280939 -0.303241,-0.280939c-0.561545,0 -1.3405,-0.607794 -1.51453,-1.181741c-0.185643,-0.612245 -0.677865,-0.685059 -0.750569,-0.111031c-0.140074,1.105947 2.332357,2.620889 2.56834,1.57371l0,0z" stroke-width="2"  fill="#303336"/>
+					<path  class="hm-color-svg" stroke="#edffff" id="hm-color-svg_1" d="m3.93371,8.83455c-1.28565,-0.41285 -2.20715,-1.72465 -1.99773,-2.84386c0.13205,-0.70575 2.91808,-4.99011 3.16139,-4.86161c0.07941,0.04195 0.78608,1.04081 1.57038,2.21971c1.25636,1.88846 1.426,2.2406 1.426,2.96022c0,1.45863 -1.36601,2.65342 -3.00618,2.62938c-0.47862,-0.00702 -0.99786,-0.05375 -1.15386,-0.10384l0,0zm1.28807,-0.73364c0.04255,-0.18884 -0.05686,-0.28094 -0.30324,-0.28094c-0.56155,0 -1.3405,-0.6078 -1.51453,-1.18174c-0.18565,-0.61225 -0.67787,-0.68506 -0.75057,-0.11103c-0.14008,1.10594 2.33235,2.62089 2.56834,1.57371l0,0z" stroke-width="1.5" fill="none"/>
+					</g>
+				</svg>
+				</button>
+				<button onclick="openColorPicker('Trawler');" class="hm-color-button">
+					<svg width="10" height="10" xmlns="http://www.w3.org/2000/svg">
+					<g>
+					<title>Layer 1</title>
+					<path stroke-opacity="0.53" stroke="#0f0f00" id="hmsvg_1" d="m3.933707,8.834547c-1.285643,-0.412845 -2.20715,-1.72465 -1.997729,-2.843858c0.132055,-0.705745 2.91808,-4.990112 3.161388,-4.861605c0.079413,0.041943 0.786085,1.040808 1.570383,2.219702c1.256363,1.888463 1.425996,2.240603 1.425996,2.960221c0,1.458636 -1.366003,2.653424 -3.006173,2.62938c-0.478625,-0.007017 -0.997865,-0.053745 -1.153866,-0.10384l0,0zm1.288069,-0.73364c0.042555,-0.188842 -0.056852,-0.280939 -0.303241,-0.280939c-0.561545,0 -1.3405,-0.607794 -1.51453,-1.181741c-0.185643,-0.612245 -0.677865,-0.685059 -0.750569,-0.111031c-0.140074,1.105947 2.332357,2.620889 2.56834,1.57371l0,0z" stroke-width="2"  fill="#303336"/>
+					<path  class="hm-color-svg" stroke="#edffff" id="hm-color-svg_2" d="m3.93371,8.83455c-1.28565,-0.41285 -2.20715,-1.72465 -1.99773,-2.84386c0.13205,-0.70575 2.91808,-4.99011 3.16139,-4.86161c0.07941,0.04195 0.78608,1.04081 1.57038,2.21971c1.25636,1.88846 1.426,2.2406 1.426,2.96022c0,1.45863 -1.36601,2.65342 -3.00618,2.62938c-0.47862,-0.00702 -0.99786,-0.05375 -1.15386,-0.10384l0,0zm1.28807,-0.73364c0.04255,-0.18884 -0.05686,-0.28094 -0.30324,-0.28094c-0.56155,0 -1.3405,-0.6078 -1.51453,-1.18174c-0.18565,-0.61225 -0.67787,-0.68506 -0.75057,-0.11103c-0.14008,1.10594 2.33235,2.62089 2.56834,1.57371l0,0z" stroke-width="1.5" fill="none"/>
+					</g>
+					</svg>
+				</button>
+			</div>
+			<div id="color-picker">
+			</div>
+
+			<!----------------------------heatmap change buttons --------------------------------->
+	
+			<div id="hm-legend" data-toggle='tooltip' title='Heatmap Legend - shift/CRTL select types to filter' class="white-tooltip" data-placement="right">
+				<div id="hm-longliner" class="hm-type hm-col-orange">Longliner</div>
+				<div id="hm-trawler" class="hm-type hm-col-green">Trawler</div>
+				<span id="hm-legend-low">0</span> 
+				<div id="hm-legend-ten">0</div>
+				<div id="hm-legend-ten-tick" class="hm-legend-tick" style="left: 68px;"></div>
+				<div id="hm-legend-mid">0</div>
+				<span id="hm-legend-high">0</span>
+				<div class="hm-legend-tick" style="left: 3px;"></div>
+				<div id="hm-legend-mid-tick" class="hm-legend-tick" style="left: 68px;"></div>
+				<div class="hm-legend-tick" style="right: 3px;"></div>
+				<button onclick="refreshHeatmaps();" class="cesium-button hm-refresh" id="button-mmsi-filter">Filter by Vessel Type</button>
+			</div>
+
+			<div id="ship-legend" data-toggle='tooltip' title='Ship Legend' class="white-tooltip" data-placement="right">
+				<table><tr><th></th><th>fishing</th><th>Non-fishing</th></tr>
+				   <tr><td>Longliner</td>
+				   <td>
+				   <svg height="5" width="5">
+					  <circle id="circle-longliner-f" cx="2" cy="2" r="2" stroke-width="0" fill="#FF6A00" />
+					</svg>
+				   </td>
+				   <td>
+				   <svg height="5" width="5">
+					  <circle id="circle-longliner-n" cx="2" cy="2" r="2" stroke-width="0" fill="rgb(255, 222, 211)" />
+					</svg>
+				   </td></tr>
+				   <tr><td>Trawler</td>
+				   <td>
+				   <svg height="5" width="5">
+					  <circle id="circle-trawler-f" cx="2" cy="2" r="2" stroke-width="0" fill="#009951" />
+					</svg>
+				   </td>
+				   <td>
+				   <svg height="5" width="5">
+					  <circle id="circle-trawler-n" cx="2" cy="2" r="2" stroke-width="0" fill="rgb(195, 238, 218)" />
+					</svg>
+				   </td></tr>
+				</table>
+			</div>
+
+			<div class='vertical-text' id="dtsSlider-text" data-toggle='tooltip' title='Filter fishing points by distance to shore (km)' class="white-tooltip" data-placement="right">
+				<p>Distance to Shore (km)</p>
+			</div>
+
+			<div id="dtsSlider" data-toggle='tooltip' title='Filter by distance to shore (km)' class="white-tooltip" data-placement="right"></div>
+			<div id="big-data">
+				<a href="https://bigdata.cs.dal.ca/">
+					<img src="./images/bigdatalogo_cesium.png">
+				</a>
+			</div>
+
+			  <!-- Modal -->
+			  <div class="modal fade" id="begin-modal" role="dialog">
+				<div class="modal-dialog">
+				  <div class="modal-content">
+					<div class="modal-header">
+					  <button type="button" class="close" data-dismiss="modal">&times;</button>
+					  <h4 class="modal-title">Fishing Activity Viewer</h4>
+					</div>
+					<div class="modal-body">
+					  <p>For instructions, <a href="#" onclick="$('#demo-video').toggle()">Watch the Viewer Demo</a></p>
+					  <div id="demo-video" style="display: none">
+						<video width="100%" controls>
+						  <source src="../video/cesium-demo.mp4" type="video/mp4">
+						</video>
+					  </div>
+					  <p>You can find this video at any time by selecting <strong>Information > Fishing Activity Viewer Demo</strong> from the navigation menu.</p>
+					  <p>At the moment, data between 2012 through 2014 is available. 2015 and 2016 will be added shortly. </p>
+					</div>
+					<div class="modal-footer">
+					  <button type="button" class="btn btn-default" data-dismiss="modal">Okay</button>
+					</div>
+				  </div>
+				</div>
+			  </div>
+
+			<div id="rect-coords"></div>
+
+			<!-- Modal for no points -->
+			  <div class="modal fade" id="end-modal" role="dialog">
+				<div class="modal-dialog">
+				  <div class="modal-content">
+					<div class="modal-header">
+					  <button type="button" class="close" data-dismiss="modal">&times;</button>
+					  <h4 class="modal-title">Fishing Activity Viewer</h4>
+					</div>
+					<div class="modal-body">
+					  <p>Data for 2015 and 2016 is not yet labelled. Please select a month from January 2012 to December 2014.</p>
+					</div>
+					<div class="modal-footer">
+					  <button type="button" class="btn btn-default" data-dismiss="modal">Okay</button>
+					</div>
+				  </div>
+				</div>
+			  </div>
+
+
+
+<!----------------------------cesium map --------------------------------->
+
+
+
+		</div>
+	</div>
+
+	<footer class="footer">
+		<div class="container">
+			<p class="pull-left shrink-text footer-text">&copy; The Institute for Big Data Analytics at Dalhousie University 2019        <br />Developments: Dr. Erico Neves De Souza, PhD @ <a href="mailto:erico.souza@Dal.Ca">erico.souza@Dal.Ca</a> and Johna Latouf @ <a href="mailto:ohna.Latouf@Dal.Ca">Johna.Latouf@Dal.Ca</a></p>
+			
+		</div>
+	</footer>
+
+	<script src="./js/spin.js"></script>
+	<script src="./js/cesiumjs/Build/Cesium/Cesium.js"></script>
+	<script src="./js/jquery-3.2.1.min.js"></script>
+	<script src="./js/cesiumjs/ship_itu.js"></script>
+	<script src="./js/cesiumjs/fishing_cesium.js"></script>
+	<script src="./js/nouislider/nouislider.min.js"></script>
+	<script src="./js/jquery-ui-1.12.0/jquery-ui.min.js"></script>
+	<script src="./js/bootstrap.js"></script>
+</body>
+</html>
